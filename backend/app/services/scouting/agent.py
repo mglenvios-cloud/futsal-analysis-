@@ -6,7 +6,6 @@ from dataclasses import dataclass, field
 import json
 
 import httpx
-from bs4 import BeautifulSoup
 
 
 @dataclass
@@ -76,6 +75,7 @@ class ScoutingAgent:
         return None
 
     def scrape_afa_futsal(self) -> List[ScoutedPlayer]:
+        from bs4 import BeautifulSoup
         players = []
 
         try:
@@ -128,6 +128,7 @@ class ScoutingAgent:
         return players
 
     def scrape_futsal_stats(self) -> List[ScoutedPlayer]:
+        from bs4 import BeautifulSoup
         players = []
 
         try:
@@ -161,6 +162,7 @@ class ScoutingAgent:
         return players
 
     def scrape_team_rosters(self) -> List[ScoutedPlayer]:
+        from bs4 import BeautifulSoup
         players = []
         teams_urls = []
 
@@ -218,6 +220,7 @@ class ScoutingAgent:
         return unique_players
 
     def search_player_info(self, player_name: str) -> Optional[ScoutedPlayer]:
+        from bs4 import BeautifulSoup
         try:
             search_url = f"https://www.afa.com.ar/buscar?q={player_name.replace(' ', '+')}"
             response = self.client.get(search_url)

@@ -4,27 +4,11 @@ from typing import List, Dict, Optional, Any
 from datetime import datetime, timezone
 from pathlib import Path
 
-from reportlab.lib import colors
-from reportlab.lib.pagesizes import A4, landscape
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.lib.units import mm, cm
-from reportlab.platypus import (
-    SimpleDocTemplate,
-    Table,
-    TableStyle,
-    Paragraph,
-    Spacer,
-    Image,
-    PageBreak,
-)
-from reportlab.graphics.shapes import Drawing, Line
-from openpyxl import Workbook
-from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
-from openpyxl.utils import get_column_letter
-
 
 class ReportGenerator:
     def __init__(self):
+        from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+
         self.styles = getSampleStyleSheet()
         self.title_style = ParagraphStyle(
             "CustomTitle",
@@ -53,6 +37,14 @@ class ReportGenerator:
         sections: List[Dict[str, Any]],
         output_path: Optional[str] = None,
     ) -> bytes:
+        from reportlab.lib import colors
+        from reportlab.lib.pagesizes import A4
+        from reportlab.lib.units import mm
+        from reportlab.platypus import (
+            SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer,
+        )
+        from reportlab.lib.styles import ParagraphStyle
+
         buffer = io.BytesIO()
 
         doc = SimpleDocTemplate(
@@ -125,6 +117,10 @@ class ReportGenerator:
         sheets: List[Dict[str, Any]],
         output_path: Optional[str] = None,
     ) -> bytes:
+        from openpyxl import Workbook
+        from openpyxl.styles import PatternFill, Font, Alignment, Border, Side
+        from openpyxl.utils import get_column_letter
+
         wb = Workbook()
 
         header_fill = PatternFill(start_color="1a1a1a", end_color="1a1a1a", fill_type="solid")
