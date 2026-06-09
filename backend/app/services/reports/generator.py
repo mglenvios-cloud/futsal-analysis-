@@ -8,6 +8,7 @@ from pathlib import Path
 class ReportGenerator:
     def __init__(self):
         from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+        from reportlab.lib import colors
 
         self.styles = getSampleStyleSheet()
         self.title_style = ParagraphStyle(

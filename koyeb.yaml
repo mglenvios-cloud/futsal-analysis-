@@ -1,0 +1,20 @@
+name: futsal-backend
+service:
+  name: api
+  instance_type: nano
+  ports:
+    - port: 8000
+      protocol: http
+  env:
+    - key: ENVIRONMENT
+      value: production
+    - key: CORS_ORIGINS
+      value: '["https://futsal-analysis.vercel.app"]'
+    - key: DATABASE_URL
+      value: sqlite:////tmp/futsal.db
+  routes:
+    - path: /
+      port: 8000
+  docker:
+    dockerfile: backend/Dockerfile
+    context: backend
