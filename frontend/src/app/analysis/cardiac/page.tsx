@@ -95,7 +95,7 @@ export default function CardiacMonitoringPage() {
     setScanning(true);
     try {
       const result = await cardiacApi.devices();
-      setDevices(result);
+      setDevices(result.data.devices || result.data);
     } catch {
       const mockDevices: Device[] = [
         { address: "00:11:22:33:44:01", name: "Polar H10", type: "HR" },

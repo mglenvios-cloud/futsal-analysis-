@@ -3,15 +3,15 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
-  Activity, TrendingUp, Zap, Heart, Speedometer, Timer,
-  GitCompare, Maximize2, RefreshCw, Download, Dumbbell, Run, UserCheck
+  Activity, TrendingUp, Zap, Heart, Gauge, Timer,
+  GitCompare, RefreshCw, Download, Dumbbell, UserCheck
 } from "lucide-react";
 import {
   RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar,
   ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid,
   Tooltip, LineChart, Line
 } from "recharts";
-import { api } from "@/lib/api";
+import { videosApi, analysisApi } from "@/lib/api";
 
 interface Video {
   id: string;
@@ -92,7 +92,7 @@ export default function PhysicalAnalysisPage() {
     const fetchVideos = async () => {
       setLoading(true);
       try {
-        const res = await api.videos.list();
+        const res = await videosApi.list();
         const completed = (res.data || res || []).filter(
           (v: Video) => v.status === "completed"
         );
@@ -111,7 +111,7 @@ export default function PhysicalAnalysisPage() {
     setAnalyzing(true);
     setAnalysis(null);
     try {
-      const res = await api.analysis.physical(selectedVideoId);
+      const res = await analysisApi.physical(Number(selectedVideoId));
       setAnalysis(res.data || res);
     } catch {
       setAnalysis(null);
@@ -125,7 +125,7 @@ export default function PhysicalAnalysisPage() {
     setAnalysis(null);
     setLoading(true);
     try {
-      const res = await api.videos.list();
+      const res = await videosApi.list();
       const completed = (res.data || res || []).filter(
         (v: Video) => v.status === "completed"
       );
@@ -231,7 +231,7 @@ export default function PhysicalAnalysisPage() {
             animate={{ opacity: 1 }}
             className="flex flex-col items-center justify-center py-20"
           >
-            <Run size={64} className="text-premium-gray mb-4" />
+            <Zap size={64} className="text-premium-gray mb-4" />
             <p className="text-white-dim text-lg mb-2">
               Selecciona un video procesado y presiona Analizar
             </p>
@@ -285,7 +285,7 @@ export default function PhysicalAnalysisPage() {
                 className="card-premium p-4 md:p-6"
               >
                 <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                  <Speedometer size={20} className="text-neon-red" />
+                  <Gauge size={20} className="text-neon-red" />
                   Perfil Fisico General
                 </h3>
                 <ResponsiveContainer width="100%" height={320}>
