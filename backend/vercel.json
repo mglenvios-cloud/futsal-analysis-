@@ -1,0 +1,6 @@
+{
+  "env": {
+    "ENVIRONMENT": "production",
+    "CORS_ORIGINS": "https://futsal-analysis.vercel.app"
+  }
+}

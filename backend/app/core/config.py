@@ -7,14 +7,14 @@ class Settings(BaseSettings):
     VERSION: str = "1.0.0"
     API_V1_PREFIX: str = "/api/v1"
 
-    DATABASE_URL: str = "postgresql://futsal_admin:futsal_secure_pass_2024@localhost:5432/futsal_analysis"
+    DATABASE_URL: str = "sqlite:////tmp/futsal.db"
     REDIS_URL: str = "redis://localhost:6379/0"
 
     SECRET_KEY: str = "futsal_jwt_secret_key_2024_production"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
     REFRESH_TOKEN_EXPIRE_DAYS: int = 7
 
-    CORS_ORIGINS: List[str] = ["http://localhost:3000"]
+    CORS_ORIGINS: List[str] = ["http://localhost:3000", "https://futsal-analysis.vercel.app"]
 
     MODEL_PATH: str = "/app/models/yolo"
     VIDEO_UPLOAD_PATH: str = "/app/data/videos"
