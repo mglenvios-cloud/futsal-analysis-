@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: futsal-backend
+    env: python
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    workingDir: backend
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: futsal-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ENVIRONMENT
+        value: production
+      - key: CORS_ORIGINS
+        value: https://futsal-analysis.vercel.app
+
+databases:
+  - name: futsal-db
+    databaseName: futsal_analysis
+    user: futsal_admin
+    plan: free

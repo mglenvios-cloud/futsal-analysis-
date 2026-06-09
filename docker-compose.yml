@@ -1,0 +1,115 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: futsal-db
+    restart: always
+    environment:
+      POSTGRES_DB: futsal_analysis
+      POSTGRES_USER: futsal_admin
+      POSTGRES_PASSWORD: futsal_secure_pass_2024
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/scripts/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
+    networks:
+      - futsal_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U futsal_admin -d futsal_analysis"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: futsal-backend
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://futsal_admin:futsal_secure_pass_2024@postgres:5432/futsal_analysis
+      REDIS_URL: redis://redis:6379/0
+      SECRET_KEY: futsal_jwt_secret_key_2024_production
+      ENVIRONMENT: production
+      CORS_ORIGINS: http://localhost:3000,https://futsal.example.com
+      MODEL_PATH: /app/models/yolo
+    volumes:
+      - ./backend:/app
+      - model_cache:/root/.cache
+      - video_data:/app/data/videos
+      - report_data:/app/data/reports
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - futsal_network
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: futsal-frontend
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8000/api/v1
+      NEXT_PUBLIC_WS_URL: ws://localhost:8000/ws
+      NODE_ENV: production
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+    depends_on:
+      - backend
+    networks:
+      - futsal_network
+
+  nginx:
+    image: nginx:alpine
+    container_name: futsal-nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/ssl:/etc/nginx/ssl
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - futsal_network
+
+  redis:
+    image: redis:7-alpine
+    container_name: futsal-redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - futsal_network
+
+volumes:
+  postgres_data:
+  model_cache:
+  video_data:
+  report_data:
+  redis_data:
+
+networks:
+  futsal_network:
+    driver: bridge
