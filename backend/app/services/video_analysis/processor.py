@@ -1,11 +1,9 @@
-import cv2
 import numpy as np
 from typing import List, Dict, Optional, Callable
 from pathlib import Path
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
-from tqdm import tqdm
 
 from app.services.video_analysis.detector import FutsalDetector, FrameResult
 

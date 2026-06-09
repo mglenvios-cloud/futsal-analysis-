@@ -1,9 +1,5 @@
-import cv2
 import numpy as np
-from ultralytics import YOLO
-import mediapipe as mp
 from typing import List, Dict, Optional, Tuple
-import supervision as sv
 from dataclasses import dataclass
 
 
@@ -28,6 +24,10 @@ class FrameResult:
 
 class FutsalDetector:
     def __init__(self, model_path: str = "yolov8n.pt"):
+        from ultralytics import YOLO
+        import mediapipe as mp
+        import supervision as sv
+
         self.player_model = YOLO(model_path)
         self.ball_model = YOLO(model_path)
         self.field_model = YOLO(model_path)
@@ -69,6 +69,7 @@ class FutsalDetector:
         return detections
 
     def detect_ball(self, frame: np.ndarray) -> Optional[Detection]:
+        import cv2
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
         lower_white = np.array([0, 0, 200])
         upper_white = np.array([180, 30, 255])
