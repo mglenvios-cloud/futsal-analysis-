@@ -1,8 +1,9 @@
 {
+  "rootDirectory": "frontend",
   "framework": "nextjs",
+  "installCommand": "npm install",
   "buildCommand": "npm run build",
   "outputDirectory": ".next",
-  "installCommand": "npm install",
   "env": {
     "NEXT_PUBLIC_API_URL": "https://futsal-api.onrender.com/api/v1",
     "NEXT_PUBLIC_WS_URL": "wss://futsal-api.onrender.com/ws"
