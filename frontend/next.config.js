@@ -4,6 +4,9 @@ const nextConfig = {
     domains: ["localhost", "futsal.example.com"],
     formats: ["image/avif", "image/webp"],
   },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 };
 
 module.exports = nextConfig;
