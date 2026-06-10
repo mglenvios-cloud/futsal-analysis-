@@ -12,7 +12,14 @@ from app.models.match import Match
 from app.services.video_analysis.processor import VideoProcessor
 
 router = APIRouter()
-video_processor = VideoProcessor(settings.MODEL_PATH)
+_video_processor = None
+
+
+def get_video_processor():
+    global _video_processor
+    if _video_processor is None:
+        _video_processor = VideoProcessor(settings.MODEL_PATH)
+    return _video_processor
 
 
 @router.post("/upload")
@@ -37,7 +44,7 @@ async def upload_video(
         content = await file.read()
         await f.write(content)
 
-    metadata = video_processor.get_metadata(str(file_path))
+    metadata = get_video_processor().get_metadata(str(file_path))
 
     video = Video(
         match_id=match_id,
@@ -123,7 +130,7 @@ async def process_video(video_id: int, db: Session = Depends(get_db)):
     db.commit()
 
     try:
-        result = video_processor.process_video(str(video.filepath))
+        result = get_video_processor().process_video(str(video.filepath))
 
         video.is_processed = True
         video.processing_status = "completed"
@@ -158,7 +165,7 @@ async def websocket_process(websocket: WebSocket, video_id: int):
                 websocket.send_json({"type": "progress", "progress": progress})
             )
 
-        result = video_processor.process_video(str(video.filepath), progress_callback)
+        result = get_video_processor().process_video(str(video.filepath), progress_callback)
 
         video.is_processed = True
         video.processing_status = "completed"

@@ -7,12 +7,19 @@ from app.models.scouting import ScoutingData
 from app.services.scouting.agent import ScoutingAgent
 
 router = APIRouter()
-scouting_agent = ScoutingAgent()
+_scouting_agent = None
+
+
+def get_scouting_agent():
+    global _scouting_agent
+    if _scouting_agent is None:
+        _scouting_agent = ScoutingAgent()
+    return _scouting_agent
 
 
 @router.post("/run")
 async def run_scouting(db: Session = Depends(get_db)):
-    players = scouting_agent.run_full_scout()
+    players = get_scouting_agent().run_full_scout()
 
     count = 0
     for p in players:

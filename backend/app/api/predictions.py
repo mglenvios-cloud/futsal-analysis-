@@ -11,7 +11,14 @@ from app.models.prediction import Prediction
 from app.services.predictive_ai.predictor import PredictiveAI
 
 router = APIRouter()
-predictive_ai = PredictiveAI()
+_predictive_ai = None
+
+
+def get_predictive_ai():
+    global _predictive_ai
+    if _predictive_ai is None:
+        _predictive_ai = PredictiveAI()
+    return _predictive_ai
 
 
 def _build_player_data(player: Player, db: Session) -> Dict:
@@ -61,7 +68,7 @@ async def predict_player(player_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Player not found")
 
     player_data = _build_player_data(player, db)
-    predictions = predictive_ai.full_prediction(player_data)
+    predictions = get_predictive_ai().full_prediction(player_data)
 
     pred_record = Prediction(
         player_id=player_id,
@@ -80,7 +87,7 @@ async def predict_player(player_id: int, db: Session = Depends(get_db)):
             "injury_prevention": predictions["injury_risk"].recommendations,
             "development": predictions["potential"].recommendations,
         },
-        model_version=predictive_ai.model_version,
+        model_version=get_predictive_ai().model_version,
     )
     db.add(pred_record)
     db.commit()

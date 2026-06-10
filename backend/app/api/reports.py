@@ -11,7 +11,14 @@ from app.models.statistics import Statistics
 from app.services.reports.generator import ReportGenerator
 
 router = APIRouter()
-report_generator = ReportGenerator()
+_report_generator = None
+
+
+def get_report_generator():
+    global _report_generator
+    if _report_generator is None:
+        _report_generator = ReportGenerator()
+    return _report_generator
 
 
 @router.get("/player/{player_id}/pdf")
@@ -44,7 +51,7 @@ async def export_player_pdf(player_id: int, db: Session = Depends(get_db)):
         "team_name": player.team.name if player.team else None,
     }
 
-    pdf_bytes = report_generator.generate_player_report(
+    pdf_bytes = get_report_generator().generate_player_report(
         player_data=player_data,
         physical_metrics=physical,
     )
@@ -77,7 +84,7 @@ async def export_team_pdf(team_id: int, db: Session = Depends(get_db)):
         for p in players
     ]
 
-    pdf_bytes = report_generator.generate_team_report(
+    pdf_bytes = get_report_generator().generate_team_report(
         team_data={"name": team.name},
         players_data=players_data,
     )
@@ -114,7 +121,7 @@ async def export_match_pdf(match_id: int, db: Session = Depends(get_db)):
         "away_score": match.away_score,
     }
 
-    pdf_bytes = report_generator.generate_match_report(
+    pdf_bytes = get_report_generator().generate_match_report(
         match_data=match_data,
         events=events,
     )
@@ -166,7 +173,7 @@ async def export_player_excel(player_id: int, db: Session = Depends(get_db)):
         },
     ]
 
-    excel_bytes = report_generator.generate_excel_report(
+    excel_bytes = get_report_generator().generate_excel_report(
         title=f"Reporte {player.name} {player.surname}",
         sheets=sheets,
     )
@@ -190,7 +197,7 @@ async def export_player_csv(player_id: int, db: Session = Depends(get_db)):
         for s in stats
     ]
 
-    csv_content = report_generator.generate_csv_report(headers=headers, rows=rows)
+    csv_content = get_report_generator().generate_csv_report(headers=headers, rows=rows)
 
     return Response(
         content=csv_content,

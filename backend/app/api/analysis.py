@@ -10,10 +10,38 @@ from app.services.predictive_ai.predictor import PredictiveAI
 from app.core.config import settings
 
 router = APIRouter()
-physical_analyzer = PhysicalAnalyzer()
-video_processor = VideoProcessor(settings.MODEL_PATH)
-tactical_analyzer = TacticalAnalyzer()
-predictive_ai = PredictiveAI()
+_physical_analyzer = None
+_video_processor = None
+_tactical_analyzer = None
+_predictive_ai = None
+
+
+def get_physical_analyzer():
+    global _physical_analyzer
+    if _physical_analyzer is None:
+        _physical_analyzer = PhysicalAnalyzer()
+    return _physical_analyzer
+
+
+def get_video_processor():
+    global _video_processor
+    if _video_processor is None:
+        _video_processor = VideoProcessor(settings.MODEL_PATH)
+    return _video_processor
+
+
+def get_tactical_analyzer():
+    global _tactical_analyzer
+    if _tactical_analyzer is None:
+        _tactical_analyzer = TacticalAnalyzer()
+    return _tactical_analyzer
+
+
+def get_predictive_ai():
+    global _predictive_ai
+    if _predictive_ai is None:
+        _predictive_ai = PredictiveAI()
+    return _predictive_ai
 
 
 @router.post("/physical/{video_id}")
@@ -23,11 +51,11 @@ async def analyze_physical(video_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Video not found")
 
     if not video.is_processed:
-        result = video_processor.process_video(str(video.filepath))
+        result = get_video_processor().process_video(str(video.filepath))
     else:
-        result = video_processor.process_video(str(video.filepath))
+        result = get_video_processor().process_video(str(video.filepath))
 
-    metrics = physical_analyzer.analyze(result.player_tracks, video.fps or 30)
+    metrics = get_physical_analyzer().analyze(result.player_tracks, video.fps or 30)
 
     return {
         "video_id": video_id,
@@ -56,8 +84,8 @@ async def analyze_tactical(video_id: int, db: Session = Depends(get_db)):
     if not video:
         raise HTTPException(status_code=404, detail="Video not found")
 
-    result = video_processor.process_video(str(video.filepath))
-    tactical = tactical_analyzer.analyze(result.player_tracks, result.ball_trajectory)
+    result = get_video_processor().process_video(str(video.filepath))
+    tactical = get_tactical_analyzer().analyze(result.player_tracks, result.ball_trajectory)
 
     return {
         "video_id": video_id,
@@ -86,12 +114,12 @@ async def full_analysis(video_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Video not found")
 
     try:
-        result = video_processor.process_video(str(video.filepath))
+        result = get_video_processor().process_video(str(video.filepath))
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Video processing failed: {str(e)}")
 
-    physical = physical_analyzer.analyze(result.player_tracks, video.fps or 30)
-    tactical = tactical_analyzer.analyze(result.player_tracks, result.ball_trajectory)
+    physical = get_physical_analyzer().analyze(result.player_tracks, video.fps or 30)
+    tactical = get_tactical_analyzer().analyze(result.player_tracks, result.ball_trajectory)
 
     return {
         "video_id": video_id,
