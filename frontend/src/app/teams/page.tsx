@@ -61,7 +61,7 @@ export default function TeamsPage() {
     async function load() {
       try {
         const res = await teamsApi.list({ page_size: 50 });
-        setTeams(res.data.items || res.data || []);
+        setTeams(res.data.teams || []);
       } catch {
         setTeams([]);
       } finally {
@@ -94,7 +94,7 @@ export default function TeamsPage() {
         const res = await teamsApi.players(teamId);
         setTeamPlayers((prev) => ({
           ...prev,
-          [teamId]: res.data.items || res.data || [],
+          [teamId]: res.data.players || [],
         }));
       } catch {
         setTeamPlayers((prev) => ({ ...prev, [teamId]: [] }));
@@ -117,7 +117,7 @@ export default function TeamsPage() {
 
       await teamsApi.create(payload);
       const res = await teamsApi.list({ page_size: 50 });
-      setTeams(res.data.items || res.data || []);
+      setTeams(res.data.teams || []);
       setShowCreateModal(false);
       setFormData({ name: "", short_name: "", city: "", coach: "", founded_year: "" });
     } catch {

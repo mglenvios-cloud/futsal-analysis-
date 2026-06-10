@@ -85,8 +85,8 @@ export default function PlayersPage() {
           playersApi.list({ page_size: 100 }),
           teamsApi.list({ page_size: 50 }),
         ]);
-        setPlayers(playersRes.data.items || playersRes.data || []);
-        setTeams(teamsRes.data.items || teamsRes.data || []);
+        setPlayers(playersRes.data.players || []);
+        setTeams(teamsRes.data.teams || []);
       } catch {
         setPlayers([]);
         setTeams([]);
@@ -127,7 +127,7 @@ export default function PlayersPage() {
 
       await playersApi.create(payload);
       const res = await playersApi.list({ page_size: 100 });
-      setPlayers(res.data.items || res.data || []);
+      setPlayers(res.data.players || []);
       setShowCreateModal(false);
       setFormData({
         name: "",

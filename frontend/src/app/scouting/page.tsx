@@ -85,10 +85,8 @@ export default function ScoutingPage() {
       if (searchQuery.trim()) params.nombre = searchQuery.trim();
 
       const res = await scoutingApi.list(params);
-      setPlayers(res.data || []);
-      setTotalPages(res.totalPages || 1);
-      if (res.stats) setStats(res.stats);
-      if (res.clubs) setClubs(res.clubs);
+      setPlayers(res.data.players || []);
+      setTotalPages(Math.ceil(res.data.total / ITEMS_PER_PAGE) || 1);
     } catch {
       setPlayers([]);
     } finally {
@@ -115,7 +113,7 @@ export default function ScoutingPage() {
     setSearchLoading(true);
     try {
       const res = await scoutingApi.search(searchQuery.trim());
-      setPlayers(res.data || []);
+      setPlayers(res.data.players || []);
       setTotalPages(1);
     } finally {
       setSearchLoading(false);
