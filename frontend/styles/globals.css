@@ -6,7 +6,7 @@
 
 @layer base {
   * {
-    @apply border-premium-gray;
+    border-color: #2d2d2d;
   }
 
   html {
@@ -14,27 +14,38 @@
   }
 
   body {
-    @apply bg-[#0a0a0a] text-white font-sans antialiased;
+    background-color: #0a0a0a;
+    color: #ffffff;
+    font-family: Inter, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   ::selection {
-    @apply bg-neon-red/30 text-white;
+    background-color: rgba(255, 23, 68, 0.3);
+    color: #ffffff;
   }
 
   ::-webkit-scrollbar {
-    @apply w-1.5 h-1.5;
+    width: 6px;
+    height: 6px;
   }
 
   ::-webkit-scrollbar-track {
-    @apply bg-premium-black;
+    background-color: #0a0a0a;
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-premium-gray/50 rounded-full hover:bg-premium-light/60 transition-colors;
+    background-color: rgba(45, 45, 45, 0.5);
+    border-radius: 9999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(61, 61, 61, 0.6);
   }
 
   input, textarea, select {
-    @apply outline-none;
+    outline: none;
   }
 }
 
