@@ -322,7 +322,6 @@ export default function PlayersPage() {
             </div>
           )}
         </motion.div>
-      </div>
 
       {/* Player Detail Modal */}
       <AnimatePresence>
