@@ -23,21 +23,21 @@ export default function ReportsPage() {
 
   useEffect(() => {
     playersApi.list()
-      .then((res) => setPlayers(res.data))
+      .then((res) => setPlayers(res.data?.players || res.data?.items || []))
       .catch(() => {})
       .finally(() => setLoadingPlayers(false));
   }, []);
 
   useEffect(() => {
     teamsApi.list()
-      .then((res) => setTeams(res.data))
+      .then((res) => setTeams(res.data?.teams || res.data?.items || []))
       .catch(() => {})
       .finally(() => setLoadingTeams(false));
   }, []);
 
   useEffect(() => {
     matchesApi.list()
-      .then((res) => setMatches(res.data))
+      .then((res) => setMatches(res.data?.matches || res.data?.items || []))
       .catch(() => {})
       .finally(() => setLoadingMatches(false));
   }, []);
