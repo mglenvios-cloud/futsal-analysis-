@@ -3,6 +3,7 @@
 import { ReactNode } from "react";
 import { Sidebar } from "@/components/ui/Sidebar";
 import { Header } from "@/components/ui/Header";
+import { CanvasParticles } from "@/components/ui/CanvasParticles";
 import { useStore } from "@/store";
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -11,7 +12,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="es" className="dark">
       <body className="min-h-screen bg-premium-black text-white-off font-sans antialiased">
-        <div className="flex h-screen overflow-hidden">
+        <CanvasParticles />
+        <div className="flex h-screen overflow-hidden relative z-10">
           <Sidebar />
           <div
             className={`flex-1 flex flex-col transition-all duration-300 ease-in-out ${
@@ -19,7 +21,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             }`}
           >
             <Header />
-            <main className="flex-1 overflow-y-auto bg-[radial-gradient(ellipse_at_top,rgba(255,23,68,0.03)_0%,transparent_50%)]">
+            <main className="flex-1 overflow-y-auto">
               {children}
             </main>
           </div>

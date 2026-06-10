@@ -45,6 +45,8 @@ const config: Config = {
         "fade-in": "fadeIn 0.3s ease-out",
         "scale-in": "scaleIn 0.2s ease-out",
         "shimmer": "shimmer 2s linear infinite",
+        "float": "float 3s ease-in-out infinite",
+        "glow-pulse": "glow-pulse 3s ease-in-out infinite",
       },
       keyframes: {
         pulseNeon: {
@@ -70,6 +72,14 @@ const config: Config = {
         shimmer: {
           "0%": { backgroundPosition: "-200% 0" },
           "100%": { backgroundPosition: "200% 0" },
+        },
+        float: {
+          "0%, 100%": { transform: "translateY(0px)" },
+          "50%": { transform: "translateY(-8px)" },
+        },
+        "glow-pulse": {
+          "0%, 100%": { boxShadow: "0 0 40px rgba(255, 23, 68, 0.08)" },
+          "50%": { boxShadow: "0 0 60px rgba(255, 23, 68, 0.16)" },
         },
       },
       boxShadow: {

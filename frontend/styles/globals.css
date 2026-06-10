@@ -15,6 +15,11 @@
 
   body {
     @apply bg-premium-black text-white-off font-sans antialiased;
+    background-image:
+      radial-gradient(rgba(255, 23, 68, 0.03) 1px, transparent 1px),
+      radial-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    background-size: 40px 40px, 80px 80px;
+    background-position: 0 0, 20px 20px;
   }
 
   ::selection {
@@ -201,8 +206,30 @@
     @apply transition-transform duration-200 hover:-translate-y-0.5;
   }
 
+  .hover-lift-lg {
+    @apply transition-all duration-300 hover:-translate-y-1;
+  }
+
   .hover-glow {
     @apply transition-all duration-200 hover:shadow-[0_0_20px_rgba(255,23,68,0.08)];
+  }
+
+  .hover-glow-neon {
+    @apply transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,23,68,0.15)];
+  }
+
+  .border-gradient {
+    @apply relative;
+  }
+
+  .border-gradient::before {
+    content: '';
+    @apply absolute inset-0 rounded-xl p-[1px];
+    background: linear-gradient(135deg, rgba(255,23,68,0.3), transparent 50%, rgba(255,23,68,0.1));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
   }
 
   .table-premium {
@@ -380,4 +407,14 @@
 @keyframes shimmer {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 40px rgba(255, 23, 68, 0.08); }
+  50% { box-shadow: 0 0 60px rgba(255, 23, 68, 0.16); }
 }
