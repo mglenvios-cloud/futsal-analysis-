@@ -1,5 +1,6 @@
 "use client";
 
+import "@/styles/globals.css";
 import { ReactNode, useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Sidebar } from "@/components/ui/Sidebar";
