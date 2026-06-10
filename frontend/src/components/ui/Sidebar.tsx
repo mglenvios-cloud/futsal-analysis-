@@ -40,26 +40,28 @@ export function Sidebar() {
 
   return (
     <aside
-      className={`fixed left-0 top-0 h-full bg-premium-dark border-r border-premium-gray z-50 transition-all duration-300 ${
+      className={`fixed left-0 top-0 h-full bg-premium-dark/95 backdrop-blur-2xl border-r border-premium-gray/60 z-50 transition-all duration-300 ${
         sidebarOpen ? "w-64" : "w-16"
       }`}
     >
-      <div className="flex items-center justify-between p-4 border-b border-premium-gray">
+      <div className="flex items-center justify-between p-4 border-b border-premium-gray/60">
         {sidebarOpen && (
-          <Link href="/dashboard" className="flex items-center gap-2">
-            <Zap className="w-6 h-6 text-neon-red" />
-            <span className="font-bold text-white text-lg">Futsal AI</span>
+          <Link href="/dashboard" className="flex items-center gap-2 group">
+            <div className="w-8 h-8 rounded-lg bg-neon-red/15 flex items-center justify-center group-hover:bg-neon-red/25 transition-colors">
+              <Zap className="w-4 h-4 text-neon-red" />
+            </div>
+            <span className="font-bold text-white text-lg tracking-tight">Futsal AI</span>
           </Link>
         )}
         <button
           onClick={toggleSidebar}
-          className="p-1.5 rounded-lg hover:bg-premium-gray text-white-dim hover:text-white transition-colors"
+          className="btn-icon ml-auto"
         >
           {sidebarOpen ? <ChevronLeft size={18} /> : <ChevronRight size={18} />}
         </button>
       </div>
 
-      <nav className="p-2 space-y-1 overflow-y-auto max-h-[calc(100vh-70px)]">
+      <nav className="p-2 space-y-0.5 overflow-y-auto max-h-[calc(100vh-140px)] scrollbar-hide">
         {navItems.map((item) => {
           const isActive = pathname === item.href || pathname?.startsWith(item.href + "/");
           const Icon = item.icon;
@@ -68,12 +70,15 @@ export function Sidebar() {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 group ${
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 group relative ${
                 isActive
-                  ? "bg-neon-red/10 text-neon-red border border-neon-red/30"
-                  : "text-white-dim hover:text-white hover:bg-premium-gray"
+                  ? "bg-neon-red/10 text-neon-red"
+                  : "text-white-dim/70 hover:text-white hover:bg-premium-gray/40"
               }`}
             >
+              {isActive && (
+                <span className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 bg-neon-red rounded-full" />
+              )}
               <Icon size={20} className={isActive ? "text-neon-red" : ""} />
               {sidebarOpen && <span className="text-sm font-medium">{item.label}</span>}
             </Link>
@@ -82,13 +87,13 @@ export function Sidebar() {
       </nav>
 
       {sidebarOpen && (
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-premium-gray">
-          <div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-premium-black/50">
-            <div className="w-8 h-8 rounded-full bg-neon-red/20 flex items-center justify-center">
+        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-premium-gray/60">
+          <div className="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-premium-black/40">
+            <div className="w-8 h-8 rounded-full bg-neon-red/15 flex items-center justify-center">
               <Zap size={14} className="text-neon-red" />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-xs text-white-dim/50">Division A</p>
+              <p className="text-xs text-white-dim/40">Division A</p>
               <p className="text-xs text-neon-red font-medium">Futsal AFA</p>
             </div>
           </div>

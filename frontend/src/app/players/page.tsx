@@ -153,121 +153,114 @@ export default function PlayersPage() {
     } catch {}
   };
 
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: { staggerChildren: 0.06 },
+    },
+  };
+
+  const item = {
+    hidden: { opacity: 0, y: 16 },
+    show: { opacity: 1, y: 0 },
+  };
+
   return (
-    <div className="min-h-screen bg-premium-black text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Title */}
+    <div className="page-container">
         <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="mb-8"
+          variants={container}
+          initial="hidden"
+          animate="show"
         >
-          <div className="flex items-center gap-3 mb-2">
-            <UserCheck className="w-8 h-8 text-neon-red" />
-            <h1 className="text-3xl font-bold text-white">Jugadores</h1>
-          </div>
-          <p className="text-white-dim text-lg">
-            Gestion de jugadores de Division A
-          </p>
-          <div className="mt-3 h-0.5 w-24 bg-neon-red neon-divider" />
-        </motion.div>
-
-        {/* Stats Bar */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8"
-        >
-          <div className="card-premium p-5 rounded-xl border border-premium-gray bg-premium-dark">
-            <div className="flex items-center gap-3 mb-2">
-              <Users className="w-5 h-5 text-neon-red" />
-              <span className="text-white-dim text-sm uppercase tracking-wider">
-                Total jugadores
-              </span>
+        <motion.div variants={item} className="flex items-center justify-between mb-6">
+          <div>
+            <div className="flex items-center gap-3 mb-1">
+              <div className="w-10 h-10 rounded-xl bg-neon-red/10 flex items-center justify-center">
+                <UserCheck className="w-5 h-5 text-neon-red" />
+              </div>
+              <h1 className="page-title">Jugadores</h1>
             </div>
-            <span className="text-2xl font-bold text-white">{stats.total}</span>
+            <p className="page-subtitle">Gestion de jugadores de Division A</p>
           </div>
-          <div className="card-premium p-5 rounded-xl border border-premium-gray bg-premium-dark">
-            <div className="flex items-center gap-3 mb-2">
-              <Filter className="w-5 h-5 text-neon-red" />
-              <span className="text-white-dim text-sm uppercase tracking-wider">
-                Posiciones disponibles
-              </span>
-            </div>
-            <span className="text-2xl font-bold text-white">{stats.positions}</span>
-          </div>
-          <div className="card-premium p-5 rounded-xl border border-premium-gray bg-premium-dark">
-            <div className="flex items-center gap-3 mb-2">
-              <Zap className="w-5 h-5 text-neon-red" />
-              <span className="text-white-dim text-sm uppercase tracking-wider">
-                Equipos representados
-              </span>
-            </div>
-            <span className="text-2xl font-bold text-white">{stats.teams}</span>
-          </div>
-        </motion.div>
-
-        {/* Actions Row */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="flex flex-wrap items-center gap-4 mb-6"
-        >
-          <div className="relative flex-1 min-w-[200px] max-w-sm">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white-dim" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Buscar jugador..."
-              className="input-premium w-full pl-10 pr-4 py-2.5 bg-premium-dark border border-premium-gray rounded-lg text-white placeholder-white-dim focus:outline-none focus:border-neon-red transition-colors"
-            />
-          </div>
-
-          <div className="flex items-center gap-2">
-            <Filter className="w-4 h-4 text-white-dim" />
-            <select
-              value={selectedPosition}
-              onChange={(e) => setSelectedPosition(e.target.value)}
-              className="bg-premium-black border border-premium-gray text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-neon-red transition-colors"
-            >
-              {POSITIONS.map((pos) => (
-                <option key={pos} value={pos}>
-                  {pos === "Todas" ? "Todas las posiciones" : pos}
-                </option>
-              ))}
-            </select>
-          </div>
-
           <button
             onClick={() => setShowCreateModal(true)}
-            className="btn-primary flex items-center gap-2 px-5 py-2.5 bg-neon-red hover:bg-red-700 text-white font-semibold rounded-lg transition-all"
+            className="btn-primary flex items-center gap-2"
           >
             <Plus className="w-4 h-4" />
             Nuevo Jugador
           </button>
         </motion.div>
 
-        {/* Players Grid */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-        >
+        <motion.div variants={item} className="dashboard-grid mb-6">
+          <div className="card-premium p-4">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-8 h-8 rounded-lg bg-accent-blue/10 flex items-center justify-center">
+                <Users className="w-4 h-4 text-accent-blue" />
+              </div>
+              <span className="stat-label">Total jugadores</span>
+            </div>
+            <p className="stat-value">{stats.total}</p>
+          </div>
+          <div className="card-premium p-4">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-8 h-8 rounded-lg bg-accent-yellow/10 flex items-center justify-center">
+                <Filter className="w-4 h-4 text-accent-yellow" />
+              </div>
+              <span className="stat-label">Posiciones</span>
+            </div>
+            <p className="stat-value">{stats.positions}</p>
+          </div>
+          <div className="card-premium p-4">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-8 h-8 rounded-lg bg-accent-green/10 flex items-center justify-center">
+                <Zap className="w-4 h-4 text-accent-green" />
+              </div>
+              <span className="stat-label">Equipos</span>
+            </div>
+            <p className="stat-value">{stats.teams}</p>
+          </div>
+        </motion.div>
+
+        <motion.div variants={item} className="flex flex-wrap items-center gap-3 mb-6">
+          <div className="relative flex-1 min-w-[200px] max-w-sm">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white-dim/40" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Buscar jugador..."
+              className="input-premium w-full pl-10 pr-4 py-2.5"
+            />
+          </div>
+          <select
+            value={selectedPosition}
+            onChange={(e) => setSelectedPosition(e.target.value)}
+            className="input-premium px-3 py-2.5 text-sm"
+          >
+            {POSITIONS.map((pos) => (
+              <option key={pos} value={pos}>
+                {pos === "Todas" ? "Todas las posiciones" : pos}
+              </option>
+            ))}
+          </select>
+        </motion.div>
+
+        <motion.div variants={item}>
           {loading ? (
             <div className="flex items-center justify-center py-20">
-              <Loader2 className="w-8 h-8 animate-spin text-neon-red" />
+              <div className="flex flex-col items-center gap-3">
+                <Loader2 className="w-8 h-8 animate-spin text-neon-red" />
+                <p className="text-sm text-white-dim/40 font-mono">Cargando jugadores...</p>
+              </div>
             </div>
           ) : filteredPlayers.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-20 text-white-dim">
-              <Users className="w-16 h-16 mb-4 opacity-40" />
-              <p className="text-xl font-medium">No hay jugadores registrados</p>
-              <p className="text-sm mt-2">
-                Agrega un nuevo jugador o ajusta los filtros de busqueda
-              </p>
+            <div className="empty-state">
+              <div className="empty-state-icon">
+                <Users className="w-8 h-8 text-white-dim/30" />
+              </div>
+              <h3 className="empty-state-title">No hay jugadores registrados</h3>
+              <p className="empty-state-text">Agrega un nuevo jugador o ajusta los filtros de busqueda</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -278,61 +271,50 @@ export default function PlayersPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3, delay: index * 0.03 }}
                   onClick={() => setSelectedPlayer(player)}
-                  className="card-premium p-5 rounded-xl border border-premium-gray bg-premium-dark hover:border-neon-red/50 cursor-pointer transition-all duration-300 group"
+                  className="card-premium p-4 cursor-pointer group"
                 >
-                  {/* Avatar */}
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 rounded-xl bg-premium-black border border-premium-gray flex items-center justify-center group-hover:border-neon-red/50 transition-colors">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-12 h-12 rounded-xl bg-premium-black border border-premium-gray/50 flex items-center justify-center group-hover:border-neon-red/40 transition-colors">
                       <span className="text-lg font-bold text-neon-red">
                         {player.name?.charAt(0)?.toUpperCase() || "?"}
                       </span>
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-white font-semibold truncate">
+                      <p className="text-sm font-semibold text-white truncate">
                         {player.name} {player.surname}
                       </p>
                       <div className="flex items-center gap-2 mt-0.5">
-                        <span
-                          className={`badge text-xs px-2 py-0.5 rounded-full ${
-                            POSITION_COLORS[player.position || ""] || "badge"
-                          }`}
-                        >
+                        <span className={`badge text-[10px] ${POSITION_COLORS[player.position || ""] || "badge"}`}>
                           {player.position || "---"}
                         </span>
                         {player.jersey_number && (
-                          <span className="text-xs text-white-dim">
-                            #{player.jersey_number}
-                          </span>
+                          <span className="text-[10px] text-white-dim/50 font-mono">#{player.jersey_number}</span>
                         )}
                       </div>
                     </div>
                   </div>
-
-                  {/* Team & Age */}
-                  <div className="space-y-1.5 mb-4 text-sm">
+                  <div className="space-y-1 mb-3 text-xs">
                     <div className="flex justify-between">
-                      <span className="text-white-dim">Equipo</span>
-                      <span className="text-white">{player.team_name || "---"}</span>
+                      <span className="text-white-dim/50">Equipo</span>
+                      <span className="text-white-dim">{player.team_name || "---"}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-white-dim">Edad</span>
-                      <span className="text-white">{player.age ?? "---"}</span>
+                      <span className="text-white-dim/50">Edad</span>
+                      <span className="text-white-dim">{player.age ?? "---"}</span>
                     </div>
                   </div>
-
-                  {/* Stats Row */}
-                  <div className="grid grid-cols-3 gap-2 pt-3 border-t border-premium-gray">
+                  <div className="grid grid-cols-3 gap-2 pt-3 border-t border-premium-gray/50">
                     <div className="text-center">
                       <p className="text-sm font-bold text-neon-red">{player.goals ?? 0}</p>
-                      <p className="text-xs text-white-dim">Goles</p>
+                      <p className="text-[10px] text-white-dim/40 uppercase tracking-wider">Goles</p>
                     </div>
                     <div className="text-center">
                       <p className="text-sm font-bold text-accent-green">{player.assists ?? 0}</p>
-                      <p className="text-xs text-white-dim">Asist.</p>
+                      <p className="text-[10px] text-white-dim/40 uppercase tracking-wider">Asist.</p>
                     </div>
                     <div className="text-center">
                       <p className="text-sm font-bold text-accent-yellow">{player.rating ?? "---"}</p>
-                      <p className="text-xs text-white-dim">Rating</p>
+                      <p className="text-[10px] text-white-dim/40 uppercase tracking-wider">Rating</p>
                     </div>
                   </div>
                 </motion.div>
@@ -349,7 +331,7 @@ export default function PlayersPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+            className="modal-overlay"
             onClick={() => setSelectedPlayer(null)}
           >
             <motion.div
@@ -358,12 +340,12 @@ export default function PlayersPage() {
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               transition={{ duration: 0.2 }}
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-lg rounded-2xl border border-premium-gray bg-premium-dark shadow-2xl overflow-hidden"
+              className="modal-content"
             >
-              <div className="relative p-6 pb-4 border-b border-premium-gray">
+              <div className="relative p-6 pb-4 border-b border-premium-gray/60">
                 <button
                   onClick={() => setSelectedPlayer(null)}
-                  className="absolute top-4 right-4 p-1.5 rounded-lg bg-premium-black border border-premium-gray text-white-dim hover:text-white hover:border-neon-red transition-all"
+                  className="absolute top-4 right-4 btn-icon"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -458,7 +440,7 @@ export default function PlayersPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+            className="modal-overlay"
             onClick={() => !creating && setShowCreateModal(false)}
           >
             <motion.div
@@ -467,60 +449,65 @@ export default function PlayersPage() {
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               transition={{ duration: 0.2 }}
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-lg rounded-2xl border border-premium-gray bg-premium-dark shadow-2xl overflow-hidden"
+              className="modal-content"
             >
-              <div className="relative p-6 pb-4 border-b border-premium-gray">
+              <div className="p-6 pb-4 border-b border-premium-gray/60">
                 <button
                   onClick={() => setShowCreateModal(false)}
                   disabled={creating}
-                  className="absolute top-4 right-4 p-1.5 rounded-lg bg-premium-black border border-premium-gray text-white-dim hover:text-white hover:border-neon-red transition-all disabled:opacity-50"
+                  className="absolute top-4 right-4 btn-icon disabled:opacity-50"
                 >
                   <X className="w-4 h-4" />
                 </button>
                 <div className="flex items-center gap-3">
-                  <Plus className="w-6 h-6 text-neon-red" />
-                  <h2 className="text-xl font-bold text-white">Nuevo Jugador</h2>
+                  <div className="w-10 h-10 rounded-xl bg-neon-red/10 flex items-center justify-center">
+                    <Plus className="w-5 h-5 text-neon-red" />
+                  </div>
+                  <div>
+                    <h2 className="text-lg font-bold text-white">Nuevo Jugador</h2>
+                    <p className="text-xs text-white-dim/50">Completa los datos del jugador</p>
+                  </div>
                 </div>
               </div>
 
-              <div className="p-6 space-y-4 max-h-[60vh] overflow-y-auto">
+              <div className="p-6 space-y-4 max-h-[60vh] overflow-y-auto scrollbar-hide">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                    <label className="text-sm text-white-dim">Nombre</label>
+                    <label className="text-xs text-white-dim/70 font-medium uppercase tracking-wider">Nombre</label>
                     <input
                       type="text"
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="input-premium w-full px-3 py-2 bg-premium-black border border-premium-gray rounded-lg text-white placeholder-white-dim focus:outline-none focus:border-neon-red transition-colors"
+                      className="input-premium w-full"
                     />
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-sm text-white-dim">Apellido</label>
+                    <label className="text-xs text-white-dim/70 font-medium uppercase tracking-wider">Apellido</label>
                     <input
                       type="text"
                       value={formData.surname}
                       onChange={(e) => setFormData({ ...formData, surname: e.target.value })}
-                      className="input-premium w-full px-3 py-2 bg-premium-black border border-premium-gray rounded-lg text-white placeholder-white-dim focus:outline-none focus:border-neon-red transition-colors"
+                      className="input-premium w-full"
                     />
                   </div>
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-sm text-white-dim">Fecha de Nacimiento</label>
+                  <label className="text-xs text-white-dim/70 font-medium uppercase tracking-wider">Fecha de Nacimiento</label>
                   <input
                     type="date"
                     value={formData.date_of_birth}
                     onChange={(e) => setFormData({ ...formData, date_of_birth: e.target.value })}
-                    className="input-premium w-full px-3 py-2 bg-premium-black border border-premium-gray rounded-lg text-white focus:outline-none focus:border-neon-red transition-colors"
+                    className="input-premium w-full"
                   />
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-sm text-white-dim">Posicion</label>
+                  <label className="text-xs text-white-dim/70 font-medium uppercase tracking-wider">Posicion</label>
                   <select
                     value={formData.position}
                     onChange={(e) => setFormData({ ...formData, position: e.target.value })}
-                    className="w-full px-3 py-2 bg-premium-black border border-premium-gray rounded-lg text-white focus:outline-none focus:border-neon-red transition-colors"
+                    className="input-premium w-full"
                   >
                     <option value="Cierre">Cierre</option>
                     <option value="Ala">Ala</option>
@@ -531,31 +518,31 @@ export default function PlayersPage() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                    <label className="text-sm text-white-dim">Altura (cm)</label>
+                    <label className="text-xs text-white-dim/70 font-medium uppercase tracking-wider">Altura (cm)</label>
                     <input
                       type="number"
                       value={formData.height}
                       onChange={(e) => setFormData({ ...formData, height: e.target.value })}
-                      className="input-premium w-full px-3 py-2 bg-premium-black border border-premium-gray rounded-lg text-white placeholder-white-dim focus:outline-none focus:border-neon-red transition-colors"
+                      className="input-premium w-full"
                     />
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-sm text-white-dim">Peso (kg)</label>
+                    <label className="text-xs text-white-dim/70 font-medium uppercase tracking-wider">Peso (kg)</label>
                     <input
                       type="number"
                       value={formData.weight}
                       onChange={(e) => setFormData({ ...formData, weight: e.target.value })}
-                      className="input-premium w-full px-3 py-2 bg-premium-black border border-premium-gray rounded-lg text-white placeholder-white-dim focus:outline-none focus:border-neon-red transition-colors"
+                      className="input-premium w-full"
                     />
                   </div>
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-sm text-white-dim">Pie Dominante</label>
+                  <label className="text-xs text-white-dim/70 font-medium uppercase tracking-wider">Pie Dominante</label>
                   <select
                     value={formData.dominant_foot}
                     onChange={(e) => setFormData({ ...formData, dominant_foot: e.target.value })}
-                    className="w-full px-3 py-2 bg-premium-black border border-premium-gray rounded-lg text-white focus:outline-none focus:border-neon-red transition-colors"
+                    className="input-premium w-full"
                   >
                     <option value="Diestro">Diestro</option>
                     <option value="Zurdo">Zurdo</option>
@@ -564,37 +551,35 @@ export default function PlayersPage() {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-sm text-white-dim">Numero de Camiseta</label>
+                  <label className="text-xs text-white-dim/70 font-medium uppercase tracking-wider">Numero de Camiseta</label>
                   <input
                     type="number"
                     value={formData.jersey_number}
                     onChange={(e) => setFormData({ ...formData, jersey_number: e.target.value })}
-                    className="input-premium w-full px-3 py-2 bg-premium-black border border-premium-gray rounded-lg text-white placeholder-white-dim focus:outline-none focus:border-neon-red transition-colors"
+                    className="input-premium w-full"
                   />
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-sm text-white-dim">Equipo</label>
+                  <label className="text-xs text-white-dim/70 font-medium uppercase tracking-wider">Equipo</label>
                   <select
                     value={formData.team_id}
                     onChange={(e) => setFormData({ ...formData, team_id: e.target.value })}
-                    className="w-full px-3 py-2 bg-premium-black border border-premium-gray rounded-lg text-white focus:outline-none focus:border-neon-red transition-colors"
+                    className="input-premium w-full"
                   >
                     <option value="">Sin equipo</option>
                     {teams.map((team) => (
-                      <option key={team.id} value={team.id}>
-                        {team.name}
-                      </option>
+                      <option key={team.id} value={team.id}>{team.name}</option>
                     ))}
                   </select>
                 </div>
               </div>
 
-              <div className="p-6 pt-4 border-t border-premium-gray">
+              <div className="p-6 pt-4 border-t border-premium-gray/60">
                 <button
                   onClick={handleCreate}
                   disabled={creating || !formData.name || !formData.surname}
-                  className="w-full flex items-center justify-center gap-2 py-3 bg-neon-red hover:bg-red-700 text-white font-semibold rounded-xl transition-all disabled:opacity-50"
+                  className="btn-primary w-full flex items-center justify-center gap-2 py-3"
                 >
                   {creating ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
@@ -608,6 +593,7 @@ export default function PlayersPage() {
           </motion.div>
         )}
       </AnimatePresence>
+      </motion.div>
     </div>
   );
 }
