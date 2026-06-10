@@ -1,6 +1,7 @@
 "use client";
 
 import { ReactNode } from "react";
+import { usePathname } from "next/navigation";
 import { Sidebar } from "@/components/ui/Sidebar";
 import { Header } from "@/components/ui/Header";
 import { CanvasParticles } from "@/components/ui/CanvasParticles";
@@ -8,24 +9,30 @@ import { useStore } from "@/store";
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   const sidebarOpen = useStore((s) => s.sidebarOpen);
+  const pathname = usePathname();
+  const isLanding = pathname === "/";
 
   return (
     <html lang="es" className="dark">
       <body className="min-h-screen bg-premium-black text-white-off font-sans antialiased">
         <CanvasParticles />
-        <div className="flex h-screen overflow-hidden relative z-10">
-          <Sidebar />
-          <div
-            className={`flex-1 flex flex-col transition-all duration-300 ease-in-out ${
-              sidebarOpen ? "ml-64" : "ml-16"
-            }`}
-          >
-            <Header />
-            <main className="flex-1 overflow-y-auto">
-              {children}
-            </main>
+        {isLanding ? (
+          children
+        ) : (
+          <div className="flex h-screen overflow-hidden relative z-10">
+            <Sidebar />
+            <div
+              className={`flex-1 flex flex-col transition-all duration-300 ease-in-out ${
+                sidebarOpen ? "ml-64" : "ml-16"
+              }`}
+            >
+              <Header />
+              <main className="flex-1 overflow-y-auto">
+                {children}
+              </main>
+            </div>
           </div>
-        </div>
+        )}
       </body>
     </html>
   );
